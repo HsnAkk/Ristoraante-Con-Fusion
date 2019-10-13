@@ -33,7 +33,7 @@ class Menu extends Component {
                     </CardImgOverlay>
                     </Card>
                 </div>
-            );
+            )
         });
         console.log('Menu Component render is invoked');
 
