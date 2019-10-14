@@ -23,6 +23,15 @@ class Main extends Component {
         };
     }
 
+    DishWithId = ({match}) => {
+        return (
+            <DishDetail dish={this.state.dishes.filter(dish => dish.id === parseInt(match.params.dishId, 10))[0]}
+                        comments={this.state.comments.filter(comment => comment.dishId === parseInt(match.params.dishId, 10))}
+            />
+
+        );
+    }
+
     render () {
 
         const HomePage = () => {
@@ -39,7 +48,8 @@ class Main extends Component {
                 <Header />
                 <Switch>
                     <Route path="/home" component= { HomePage } />
-                    <Route path="/menu" component= { () => <Menu dishes= {this.state.dishes} />} />
+                    <Route exact path="/menu" component= { () => <Menu dishes= {this.state.dishes} />} />
+                    <Route path="/menu/:dishId" component= { this.DishWithId } />
                     <Route exact path="/contactus" component= { Contact } />
                     <Redirect to="/home" />
                 </Switch>
