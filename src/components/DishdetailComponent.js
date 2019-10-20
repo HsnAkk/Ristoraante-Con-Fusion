@@ -3,6 +3,7 @@ import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbIte
         Button, Modal, ModalHeader, ModalBody, Row, Label} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Loading } from './LoadingComponent';
 
 
     const required = (val) => val && val.length;
@@ -21,8 +22,8 @@ import { Control, LocalForm, Errors } from 'react-redux-form';
         toggle = () => this.setState({ modal: !this.state.modal});
     
         handleSubmit = values => {
-           this.toggle();
-           this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+            this.toggle();
+            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
         }
     
         render() {
@@ -138,27 +139,47 @@ import { Control, LocalForm, Errors } from 'react-redux-form';
 
     
     const DishDetail = (props) => {
-        return (
-            <div className="container">
-                <div className="row">
-                    <Breadcrumb>
-                        <BreadcrumbItem><Link to='/menu'>Menu</Link></BreadcrumbItem>
-                        <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
-                    </Breadcrumb>
-                    <div className='col-12'>
-                        <h3>{props.dish.name}</h3>
-                        <hr />
+        if (props.isLoading) {
+            return (
+                <div className="container">
+                    <div className="row">
+                        <Loading />
                     </div>
                 </div>
-                <div className="row">
-                    <RenderDish dish = {props.dish} />
-                    <RenderComments comments = {props.comments} 
-                                    addComment = {props.addComment}
-                                    dishId = {props.dish.id}
-                    />
+            );
+        } else if (props.errMess) {
+            return (
+                <div className="container">
+                    <div className="row">
+                        <h4>{props.errMess}</h4>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        } else if (props.dish != null) {
+            return (
+                <div className="container">
+                    <div className="row">
+                        <Breadcrumb>
+                            <BreadcrumbItem><Link to='/menu'>Menu</Link></BreadcrumbItem>
+                            <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                        </Breadcrumb>
+                        <div className='col-12'>
+                            <h3>{props.dish.name}</h3>
+                            <hr />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <RenderDish dish = {props.dish} />
+                        <RenderComments comments = {props.comments} 
+                                        addComment = {props.addComment}
+                                        dishId = {props.dish.id}
+                        />
+                    </div>
+                </div>
+            );
+        } else {
+            return <div></div>
+        }
     };
 
     export default DishDetail;
